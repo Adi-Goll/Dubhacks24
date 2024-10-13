@@ -47,6 +47,7 @@ const App = () => {
     axios.post("http://localhost:3001/file-ask",{fileName: fileRequest})
     .then(function (response) {
       // handle success
+      alert(JSON.stringify(response.data.data, null, 2))
       console.log(response.data.data);
     })
     .catch(function (error) {
