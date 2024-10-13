@@ -1,35 +1,119 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import { Upload, FileText } from 'lucide-react';
+import './App.css';
+import axios from 'axios';
 
-function App() {
-  const [count, setCount] = useState(0)
+
+
+const App = () => {
+  const [file, setFile] = useState(null);
+  const [fileRequest, setFileRequest] = useState('');
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0]; // Capture the file object right away
+    setFile(file);
+  
+    if (file) {
+      const reader = new FileReader();
+      
+      // Set up the onload event
+      reader.onload = function (readerEvent) {
+        const content = readerEvent.target.result; // File content
+        console.log(content); // You should see the file's content in the console
+  
+        // Make the axios request after reading the file content
+        axios
+          .post('http://localhost:3001/', { fileName: file.name, data: content }) // Use file.name here
+          .then(function (response) {
+            // Handle success
+            console.log(response);
+          })
+          .catch(function (error) {
+            // Handle error
+            console.log(error);
+          });
+      };
+  
+      // Read the file as text
+      reader.readAsText(file);
+    }
+  };
+
+  const handleFileRequest = () => {
+    console.log('File requested:', fileRequest);
+
+    setIsDialogOpen(false);
+    axios.post("http://localhost:3001/file-ask",{fileName: fileRequest})
+    .then(function (response) {
+      // handle success
+      console.log(response.data.data);
+    })
+    .catch(function (error) {
+      // handle error
+      console.log(error);
+    })
+  };
+
+
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="medical-platform">
+      <div className="container">
+        <h1>Medical File Platform</h1>
+        
+        <div className="button-group">
+          <label htmlFor="file-upload" className="button">
+            <Upload size={20} className="button-icon" />
+            <span>Upload File</span>
+            <input
+              id="file-upload"
+              type="file"
+              onChange={handleFileChange}
+              className="file-input"
+            />
+          </label>
+          
+          <button 
+            className="button"
+            onClick={() => setIsDialogOpen(true)}
+          >
+            <FileText size={20} className="button-icon" />
+            <span>Request File</span>
+          </button>
+        </div>
 
-export default App
+        {isDialogOpen && (
+          <div className="dialog-overlay">
+            <div className="dialog">
+              <h2>Request File</h2>
+              <input
+                type="text"
+                value={fileRequest}
+                onChange={(e) => setFileRequest(e.target.value)}
+                placeholder="Enter file name"
+                className="dialog-input"
+              />
+              <div className="dialog-buttons">
+                <button 
+                  className="button"
+                  onClick={handleFileRequest}
+                >
+                  Submit
+                </button>
+                <button 
+                  className="button"
+                  onClick={() => setIsDialogOpen(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default App;
