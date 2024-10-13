@@ -1,7 +1,7 @@
 import json
 
 def parse_hl7():
-    file_path = "hl7Examples/specificInstructions.hl7"
+    file_path = "./server/hl7Examples/specificInstructions.hl7"
 
     with open(file_path, 'r') as file:
         message = file.read()

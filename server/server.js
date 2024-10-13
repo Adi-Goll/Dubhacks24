@@ -8,14 +8,13 @@ app.listen(8080, () => {
     console.log('server listening on port 8080')
 })
 
-// DOESN'T WORK YET
 
 // get parser info into here and then send it to the frontend
 
 // this function calls the parser and then retrieves the printed JSON obj from the stdout
 function runPythonScript() {
     return new Promise((resolve, reject) => {
-      exec("python3 parser.py", (error, stdout, stderr) => {
+      exec("python3 ./server/parser.py", (error, stdout, stderr) => {
         if (error) {
           console.error(`exec error: ${error}`);
           reject(`Error: ${error.message}`);
@@ -37,7 +36,8 @@ function runPythonScript() {
     });
   }
 
-  runPythonScript();
+  let resp = await runPythonScript();
+  console.log(resp)
 
   app.get('/patientParseInfo', async (req, res) => {
     try {
