@@ -262,19 +262,6 @@ Styling for each section of data */
   font-style: italic;
 }
 
-/* Temporary message for upload success */
-.upload-message {
-  font-size: 1.2em;
-  margin-top: 20px;
-  padding: 10px;
-  border-radius: 5px;
-  text-align: center;
-  background-color: var(--medium-blue); /* Medium blue background */
-  color: var(--white);  /* White text */
-  border: 1px solid var(--light-blue);  /* Light blue border */
-  display: none; /* Hidden by default */
-}
-
 /* Show the message when it's needed */
 .upload-message.visible {
   display: block; /* Show the message */
