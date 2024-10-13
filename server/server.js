@@ -87,9 +87,8 @@ app.use(bodyParser.json());
 //   });
 // });
 
-app.post('/',(req,res) =>{
+app.post('/file-send',(req,res) =>{
   const {fileName, data} = req.body;
-  console.log("DLKJF;lkaj;slfkj;asdk")
   axios.put(`https://24saex3x6i.execute-api.us-west-2.amazonaws.com/dev/dey-test-bucket/${fileName}`, data)
   .then(function (response) {
     // handle success
@@ -103,7 +102,7 @@ app.post('/file-ask', (req,res) =>{
   axios.get(`https://et307nrzq1.execute-api.us-west-2.amazonaws.com/dev/ehr-processed-s3/${fileName}.json`)
   .then(function (response) {
   // handle success
-  res.json({ message: `File ${fileName} received successfully.`, data: response.data});
+  res.json({data: response.data});
 })
 })
 
