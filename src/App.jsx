@@ -13,16 +13,14 @@ const App = () => {
   const [showThankYouMessage, setShowThankYouMessage] = useState(false);
 
   const handleFileChange = (event) => {
-    const file = event.target.files[0]; // Capture the file object right away
+    const file = event.target.files[0];
     setFile(file);
   
     if (file) {
       const reader = new FileReader();
       
-      // Set up the onload event
       reader.onload = function (readerEvent) {
-        const content = readerEvent.target.result; // File content
-        console.log(content); // You should see the file's content in the console
+        const content = readerEvent.target.result; 
   
         // Make the axios request after reading the file content
         axios
@@ -146,6 +144,7 @@ const App = () => {
           <div className="dialog-overlay">
             <div className="dialog">
               <h2>Request File</h2>
+              <div className="dialog-input-wrapper">
               <input
                 type="text"
                 value={fileRequest}
@@ -153,6 +152,7 @@ const App = () => {
                 placeholder="Enter file name"
                 className="dialog-input"
               />
+              </div>
               <div className="dialog-buttons">
                 <button 
                   className="button"

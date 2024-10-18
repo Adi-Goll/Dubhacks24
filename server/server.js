@@ -1,16 +1,6 @@
-// import express from "express";
-// import { exec } from "child_process";
+// get parser info into here and then send it to the frontend
 
-
-// const app = express();
-
-// app.listen(8080, () => {
-//     console.log('server listening on port 8080')
-// })
-
-// // get parser info into here and then send it to the frontend
-
-// // this function calls the parser and then retrieves the printed JSON obj from the stdout
+// PRE CLOUD INTEGRATION: this function calls the parser and then retrieves the printed JSON obj from the stdout
 // function runPythonScript() {
 //     return new Promise((resolve, reject) => {
 //       exec("python3 ./server/parser.py", (error, stdout, stderr) => {
@@ -53,40 +43,17 @@ import axios from 'axios';
 const app = express();
 const port = 3001;
 
-// // Middleware
+
+// avoiding errors, enabling CORS and requests specifically from the loalhost the frontend runs on
 app.use(cors({
-  origin: 'http://localhost:5173',  // Replace with your frontend origin
+  origin: 'http://localhost:5173',
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type'],
 }));
 app.use(bodyParser.json());
 
-// //`https://24saex3x6i.execute-api.us-west-2.amazonaws.com/dev/dey-test-bucket/${event.target.files[0].name}`
-// // Upload file route
-// app.post('/', (req, res) => {
 
-//   console.log(req.body)
-// });
-
-// // File request route
-// app.get('/file/:fileName', (req, res) => {
-//   const fileName = req.params.fileName;
-
-//   const params = {
-//     Bucket: 'dey-test-bucket',
-//     Key: `${fileName}.json`,
-//   };
-
-//   s3.getObject(params, (err, data) => {
-//     if (err) {
-//       console.log('Error retrieving file:', err);
-//       res.status(500).send('Failed to retrieve file');
-//     } else {
-//       res.status(200).send(data.Body.toString('utf-8'));
-//     }
-//   });
-// });
-
+// if frontend sends a post request to ./file-send send a put request to AWS API Gateway with file name and the file data
 app.post('/file-send',(req,res) =>{
   const {fileName, data} = req.body;
   axios.put(`https://24saex3x6i.execute-api.us-west-2.amazonaws.com/dev/dey-test-bucket/${fileName}`, data)
@@ -97,6 +64,7 @@ app.post('/file-send',(req,res) =>{
 })
 
 
+// frontend post request to ./file-ask then send get request to s3 bucket to ask for file info.
 app.post('/file-ask', (req,res) =>{
   const {fileName} = req.body;
   axios.get(`https://et307nrzq1.execute-api.us-west-2.amazonaws.com/dev/ehr-processed-s3/${fileName}.json`)
