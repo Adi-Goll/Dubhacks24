@@ -46,7 +46,7 @@ const port = 3001;
 
 // avoiding errors, enabling CORS and requests specifically from the loalhost the frontend runs on
 app.use(cors({
-  origin: 'http://localhost:5173',
+  // origin: 'http://localhost:5173',
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type'],
 }));
